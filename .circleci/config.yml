@@ -2,6 +2,10 @@
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
+
+orbs:
+  heroku: circleci/heroku@1.0.0
+
 jobs:
   build:
     docker:
@@ -35,15 +39,15 @@ jobs:
             name: Deploy Master to Heroku
             command: |
               git push https://heroku:7f18f284-a1d2-4972-8a74-dbff55df1d17@git.heroku.com/go-circleE.git master
-
-  workflows:
-    version: 2
-    build-deploy:
-      jobs:
-        - build
-        - deploy:
-            requires:
-              - build
-            filters:
-              branches:
-                only: master
+    
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+             - build
+          filters:
+            branches:
+              only: master
