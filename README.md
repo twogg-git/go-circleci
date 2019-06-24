@@ -1,4 +1,4 @@
-# go-circleci-strings
+# go-circleci
 
 [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci-strings.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci-strings)
 
