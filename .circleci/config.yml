@@ -38,7 +38,7 @@ jobs:
         - run:
             name: Deploy Master to Heroku
             command: |
-              git push https://heroku:7f18f284-a1d2-4972-8a74-dbff55df1d17@git.heroku.com/go-circleE.git master
+              git push https://heroku:7f18f284-a1d2-4972-8a74-dbff55df1d17@git.heroku.com/go-circle.git master
     
 workflows:
   version: 2
