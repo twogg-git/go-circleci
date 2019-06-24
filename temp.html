@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Golang Test </title>
+	<meta charset="utf-8">
+	<meta name="description" content="This is a simple template loading test with Golang">
+	<meta name="author" content="twogg-git">   
+	<style>
+		.button {
+		  background:green;
+		  color: white;
+		  text-align: center;
+		  display: inline-block;
+		  font-size: 14px;
+		}
+		.title {
+		  color:purple;
+		  font-size: 24px;
+		}
+		.content {
+		  color:green;
+		  font-size: 18px;
+		}
+		.table {
+		  color:blue;
+		  font-size: 16px;
+		}
+	</style>
+</head>    
+
+<body>
+
+<h1 class="title">Simple Deploy with Golang<h1>
+
+<div class="content">
+	Current IP: {{.ServerIP}}<br>
+	Deployed: {{.Deployed}}<br>
+	Version: {{.Version}}
+</div>
+
+<div class="table">
+	<br>Active endpoints:
+	<ul id="infoTable" class="table">
+	    {{range .Endpoints}}
+	        {{if .Active}}
+	            <li class="true">{{.Path}}, {{.Type}}</li>
+	        {{end}}
+	    {{end}}
+	</ul>
+</div>
+
+<div>
+	<button type="button"  class= "button" onclick="flipFunc()">Flip Text</button>
+	<input id="toflip" name="toflip" type="text" value="" />
+	<label id="fliResult" class="table"></label>
+</div>
+
+<script>
+    function flipFunc() {
+		var callTo = "http://{{.ServerIP}}:{{.Port}}/flip?text=" + toflip.value;
+		var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+	         if (this.readyState == 4 && this.status == 200) {
+				document.getElementById('fliResult').innerHTML = this.responseText;
+	         }
+	    };
+	    xhttp.open("GET", callTo, true);
+	   	xhttp.setRequestHeader("Content-type", "text/plain");
+	    xhttp.send();
+ }
+</script>
+
+<div>
+	<button type="button"  class= "button" onclick="timeFunc()">Server Time</button>
+	<label id="currentTime" class="table"></label>
+</div>
+
+<script>
+    function timeFunc() {
+		var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+	         if (this.readyState == 4 && this.status == 200) {
+				document.getElementById('currentTime').innerHTML = this.responseText;
+	         }
+	    };
+	    xhttp.open("GET", "http://{{.ServerIP}}:{{.Port}}/time", true);
+	   	xhttp.setRequestHeader("Content-type", "text/plain");
+	    xhttp.send();
+ }
+</script>
+
+<div class="table"><br>Note: To use flip endpoint call http://{{.ServerIP}}:{{.Port}}/flip?text=texToFlip</div>
+
+</body>
+</html>
