@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
 const VERSION = "v1.0"
-const PORT = "8082"
+const PORT = "8080"
 
 type Endpoint struct {
 	Path   string
@@ -36,7 +38,20 @@ func getServerIP() string {
 	return conn.LocalAddr().(*net.UDPAddr).IP.String()
 }
 
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = PORT
+		log.Println("[-] No PORT environment variable detected. Setting to ", port)
+	}
+	return port
+}
+
 func main() {
+
+	port := getPort()
+	log.Println("[-] Listening on...", port)
+
 	tmpl := template.Must(template.ParseFiles("temp.html"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +89,7 @@ func main() {
 		fmt.Fprintf(w, Flip(textToFlip))
 	})
 
-	if err := http.ListenAndServe(":"+PORT, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		panic(err)
 	}
 
