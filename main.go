@@ -9,7 +9,7 @@ import (
 )
 
 const VERSION = "v1.0"
-const PORT = "8080"
+const PORT = "5000"
 
 type Endpoint struct {
 	Path   string
