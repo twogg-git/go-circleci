@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"go-circleci-strings/validations"
 	"html/template"
 	"net"
 	"net/http"
@@ -72,7 +71,7 @@ func main() {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		textToFlip := r.FormValue("text")
-		fmt.Fprintf(w, validations.Flip(textToFlip))
+		fmt.Fprintf(w, Flip(textToFlip))
 	})
 
 	if err := http.ListenAndServe(":"+PORT, nil); err != nil {
