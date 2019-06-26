@@ -12,6 +12,9 @@ Heroku dynamically assigns your app a port, so you can't set the port to a fixed
 Heroku configurations are fetched from the OS environment variables.
 So to fetch the webapp port, you will need to call os.Getenv("PORT").
 
+port := os.Getenv("PORT")
+
+
 https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
 
 ### App deployed into Heroku
