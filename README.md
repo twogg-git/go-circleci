@@ -20,3 +20,35 @@ https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
 ### App deployed into Heroku
 
 https://go-circle.herokuapp.com/
+
+https://devcenter.heroku.com/articles/go-support#go-versions
+https://medium.com/forloop/continuously-deploy-your-golang-binaries-using-circleci-and-heroku-docker-eb27e06d68f2
+https://circleci.com/docs/2.0/deployment-integrations/#heroku
+
+```sh
+version: 2
+jobs:
+  build:
+    ...
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+ ```
