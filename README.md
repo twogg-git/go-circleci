@@ -2,8 +2,42 @@
 
 [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
 
-Simple Go string validator app to test with CircleCI
+Simple Go string validator app to test in Heroku deployed by CircleCI. 
 
+## Content 
+
+This repo contains the following source files:
+- strings.go : a very small golang code to flip a given string  
+- strings_test.go: unit test cases in golang for CircleCI to run
+- main.go: main class with the endpoints and the setters for the html template 
+- temp.html: the actual webpage that we are going to visualize
+
+Heroku requieres two files to be able to deploy in their servers:
+- requirements.txt: that at ths point are none, so its a blank file
+- Godeps/Godeps.json: the descriptor of the Go Version to use
+
+To test locally, we added a Docker deployment
+- Dockerfile: small Dockerfile to be able to build an image and run a container for our webpage
+
+Finally, CircleCI config file
+- config.yml: here we setup the actual build code in Circle and the futher deployment in Heroku.
+
+## Local Docker Deployment
+
+To build locally the image
+```sh
+docker build -t webtest:v1 .
+```
+
+To run the container
+```sh
+docker run --name webtest -p 8181:8080 -t webtest:v1
+```
+
+Test the webpage
+```sh
+http:localhost:8181
+```
 
 ### Adding the port from the OS
 
