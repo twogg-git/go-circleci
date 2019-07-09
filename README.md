@@ -1,8 +1,5 @@
-# go-circleci
-
-[![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
-
-Simple Go string validator app to test in Heroku deployed by CircleCI. 
+# Golang + CircleCI + Heroku
+Simple Go string flip code call by a webpage deployed in Heroku by CircleCI. [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
 
 ## Content 
 
