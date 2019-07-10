@@ -3,26 +3,12 @@ Simple Go string flip code call by a webpage deployed in Heroku by CircleCI. [![
 
 Here is the live deployment in Heroku: **https://go-circle.herokuapp.com/** 
 
-## Requirements
+## 1. Requirements
 - GitHub account (https://github.com), so you can build your app in CircleCI servers. 
 - Heroku Account https://www.heroku.com, to deploy the webpage in Heroku servers.
 - CircleCI connection (https://circleci.com), provide CircleCI access to your repository in GitHub.
 
-## Local Docker Deployment
-To run the container
-```sh
-docker run --name go-circle -p 8181:8080 -t twogghub/go-circle:v1
-```
-Then test the webpage in your browser: http:localhost:8181
-
-## Local building and deployment
-To build locally the image, go to the folder's project then run:
-```sh
-docker build -t go-circle .
-docker run --name go-circle -p 8181:8080 -t go-circle
-```
-
-## Source Code 
+## 2. Knowing the source code 
 This repo contains the following source files:
 - strings.go : a very small golang code to flip a given string  
 - strings_test.go: unit test cases in golang for CircleCI to run
@@ -76,7 +62,7 @@ func Flip(s string) string {
 </script>
 ```
 
-Heroku requieres two files to be able to deploy in their servers:
+Heroku requieres two files to be able to deploy Golang apps into their servers:
 - requirements.txt: that at ths point are none, so its a blank file
 - Godeps/Godeps.json: the descriptor of the Go Version to use
 ```sh
@@ -126,6 +112,10 @@ orbs:
  ...
 ```
 
+## 3. Creating your golang repo
+
+## 4. Setting up Heroku  
+
 ## Heroku's dinamic port in the code
 Heroku dynamically assigns your app a port, so you can't set the port to a fixed number. Heroku adds the port to the env, so you can pull it from there. Heroku configurations are fetched from the OS environment variables. So to fetch the webapp port, you will need to call **os.Getenv("PORT")**.
 ```sh
@@ -151,4 +141,23 @@ https://circleci.com/docs/2.0/deployment-integrations/#heroku
             command: |
               git push https://heroku:$HEROKU_KEY@git.heroku.com/go-circle.git master
  ...
+```
+
+## 5. Setting up CircleCI
+
+
+# DOCKER BONUS
+
+## Local Docker Deployment
+To run the container
+```sh
+docker run --name go-circle -p 8181:8080 -t twogghub/go-circle:v1
+```
+Then test the webpage in your browser: http:localhost:8181
+
+## Local building and deployment
+To build locally the image, go to the folder's project then run:
+```sh
+docker build -t go-circle .
+docker run --name go-circle -p 8181:8080 -t go-circle
 ```
