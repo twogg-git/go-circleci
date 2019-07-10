@@ -146,7 +146,7 @@ https://circleci.com/docs/2.0/deployment-integrations/#heroku
 # BONUS: Docker deployment
 
 ## Local Docker Deployment
-To run the container
+To run the container. Public docker registry: https://hub.docker.com/r/twogghub/go-circle
 ```sh
 docker run --name go-circle -p 8181:8080 -t twogghub/go-circle:v1
 ```
