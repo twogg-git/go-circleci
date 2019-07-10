@@ -143,7 +143,7 @@ https://circleci.com/docs/2.0/deployment-integrations/#heroku
 ## 5. Setting up CircleCI
 
 
-# DOCKER BONUS
+# BONUS: Docker deployment
 
 ## Local Docker Deployment
 To run the container
