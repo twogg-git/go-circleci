@@ -1,8 +1,30 @@
 # Golang + CircleCI + Heroku
 Simple Go string flip code call by a webpage deployed in Heroku by CircleCI. [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
 
-## Content 
+Here is the live deployment in Heroku: **https://go-circle.herokuapp.com/** 
 
+## Requirements
+- GitHub account (https://github.com), so you can build your app in CircleCI servers. 
+- Heroku Account https://www.heroku.com, to deploy the webpage in Heroku servers.
+- CircleCI connection (https://circleci.com), provide CircleCI access to your repository in GitHub.
+
+## Docker Deployment
+To run the container
+```sh
+docker run --name go-circle -p 8181:8080 -t twogghub/go-circle:v1
+
+# Then test the webpage going in yuor browser to:
+http:localhost:8181
+```
+
+## Local building and deployment
+To build locally the image, go to the folder's project then run:
+```sh
+docker build -t go-circle .
+docker run --name go-circle -p 8181:8080 -t go-circle
+```
+
+## Source Code 
 This repo contains the following source files:
 - strings.go : a very small golang code to flip a given string  
 - strings_test.go: unit test cases in golang for CircleCI to run
@@ -106,36 +128,22 @@ orbs:
  ...
 ```
 
-## Local Docker Deployment
-
-To build locally the image
-```sh
-docker build -t webtest:v1 .
-```
-
-To run the container
-```sh
-docker run --name webtest -p 8181:8080 -t webtest:v1
-```
-
-Test the webpage
-```sh
-http:localhost:8181
-```
-
 ### Adding the port from the OS
 
-Heroku dynamically assigns your app a port, so you can't set the port to a fixed number. Heroku adds the port to the env, so you can pull it from there
+Heroku dynamically assigns your app a port, so you can't set the port to a fixed number. Heroku adds the port to the env, so you can pull it from there. Heroku configurations are fetched from the OS environment variables. So to fetch the webapp port, you will need to call **os.Getenv("PORT")**.
+```sh
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = PORT
+		log.Println("[-] No PORT environment variable detected. Setting to ", port)
+	}
+	return port
+}
+```
+Source: https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
 
-Heroku configurations are fetched from the OS environment variables.
-So to fetch the webapp port, you will need to call os.Getenv("PORT").
-
-port := os.Getenv("PORT")
-
-
-https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
-
-### App deployed into Heroku
+## App deployed into Heroku
 
 https://go-circle.herokuapp.com/
 
