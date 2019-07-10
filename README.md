@@ -1,5 +1,5 @@
 # Golang + CircleCI + Heroku
-Simple Go string flip code call by a webpage deployed in Heroku by CircleCI. [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
+Simple Golang string flip code called by a webpage deployed in Heroku by CircleCI. [![CircleCI](https://circleci.com/gh/twogg-git/go-circleci.svg?style=svg)](https://circleci.com/gh/twogg-git/go-circleci)
 
 Here is the live deployment in Heroku: **https://go-circle.herokuapp.com/** 
 
@@ -10,8 +10,8 @@ Here is the live deployment in Heroku: **https://go-circle.herokuapp.com/**
 
 ## 2. Knowing the source code 
 This repo contains the following source files:
-- strings.go : a very small golang code to flip a given string  
-- strings_test.go: unit test cases in golang for CircleCI to run
+- **strings.go**: a very small golang code to flip a given string  
+- **strings_test.go**: unit test cases in golang for CircleCI to run
 ```sh
 // flip reverses all the characters on the give string s
 func Flip(s string) string {
@@ -21,7 +21,7 @@ func Flip(s string) string {
 	return s[len(s)-1:] + Flip(s[:len(s)-1])
 }
 ```
-- main.go: main class with the endpoints and the setters for the html template 
+- **main.go**: main class with the endpoints and the setters for the html template 
 ```sh
   # the endpoints available 
   http.HandleFunc("/time", func(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +36,7 @@ func Flip(s string) string {
 		...
 	})
 ```
-- temp.html: the actual webpage that we are going to visualize
+- **temp.html**: the actual webpage that we are going to visualize
 ```sh
 # loading the info as a parameter from the golang code
 <div class="content">
@@ -62,7 +62,7 @@ func Flip(s string) string {
 </script>
 ```
 
-Heroku requieres two files to be able to deploy Golang apps into their servers:
+**Heroku requiered files**: This two files work as a descriptors to deploy Golang apps into Heroku servers
 - requirements.txt: that at ths point are none, so its a blank file
 - Godeps/Godeps.json: the descriptor of the Go Version to use
 ```sh
@@ -72,28 +72,9 @@ Heroku requieres two files to be able to deploy Golang apps into their servers:
   ...
 }
 ```
-
-To test locally, we added a Docker deployment
-- Dockerfile: small Dockerfile to be able to build an image and run a container for our webpage. 
+**CircleCI config.yml**: This file setup the actual building job in Circle and the futher deployment in Heroku.
 ```sh
-  FROM golang:1.10-alpine3.7 as builder
-  WORKDIR /go/src/go-circleci/main
-  COPY . .
-  RUN go get -d ./... && go build -o main .
-
-  FROM alpine:3.8
-  RUN apk --no-cache add ca-certificates
-  WORKDIR /root/
-  COPY --from=builder /go/src/go-circleci/main .
-
-  EXPOSE 8080
-  ENTRYPOINT ./main
-```
-
-Finally, CircleCI config file
-- config.yml: here we setup the actual build code in Circle and the futher deployment in Heroku.
-```sh
-# Including heere the orb for Heroku
+# Here the orb for Heroku connection
 orbs:
   heroku: circleci/heroku@1.0.0
   ...
@@ -110,6 +91,22 @@ orbs:
             command: |
               git push https://heroku:$HEROKU_KEY@git.heroku.com/go-circle.git master
  ...
+```
+
+**Dockerfile**: This part is more like a *bonus*, because we are using Heroku to deploy online the webpage.
+```sh
+  FROM golang:1.10-alpine3.7 as builder
+  WORKDIR /go/src/go-circleci/main
+  COPY . .
+  RUN go get -d ./... && go build -o main .
+
+  FROM alpine:3.8
+  RUN apk --no-cache add ca-certificates
+  WORKDIR /root/
+  COPY --from=builder /go/src/go-circleci/main .
+
+  EXPOSE 8080
+  ENTRYPOINT ./main
 ```
 
 ## 3. Creating your golang repo
