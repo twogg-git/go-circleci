@@ -6,18 +6,105 @@ Simple Go string flip code call by a webpage deployed in Heroku by CircleCI. [![
 This repo contains the following source files:
 - strings.go : a very small golang code to flip a given string  
 - strings_test.go: unit test cases in golang for CircleCI to run
+```sh
+// flip reverses all the characters on the give string s
+func Flip(s string) string {
+	if len(s) <= 1 {
+		return s
+	}
+	return s[len(s)-1:] + Flip(s[:len(s)-1])
+}
+```
 - main.go: main class with the endpoints and the setters for the html template 
+```sh
+  # the endpoints available 
+  http.HandleFunc("/time", func(w http.ResponseWriter, r *http.Request) {
+		...
+	})
+
+	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
+		...
+	})
+
+	http.HandleFunc("/flip", func(w http.ResponseWriter, r *http.Request) {
+		...
+	})
+```
 - temp.html: the actual webpage that we are going to visualize
+```sh
+# loading the info as a parameter from the golang code
+<div class="content">
+	Current IP: {{.ServerIP}}<br>
+	Deployed: {{.Deployed}}<br>
+	Version: {{.Version}}
+</div>
+...
+# calling flip's endpoint 
+<script>
+    function flipFunc() {
+		var callTo = "http://{{.ServerIP}}:{{.Port}}/flip?text=" + toflip.value;
+		var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function() {
+	         if (this.readyState == 4 && this.status == 200) {
+				document.getElementById('fliResult').innerHTML = this.responseText;
+	         }
+	    };
+	    xhttp.open("GET", callTo, true);
+	   	xhttp.setRequestHeader("Content-type", "text/plain");
+	    xhttp.send();
+ }
+</script>
+```
 
 Heroku requieres two files to be able to deploy in their servers:
 - requirements.txt: that at ths point are none, so its a blank file
 - Godeps/Godeps.json: the descriptor of the Go Version to use
+```sh
+{
+	"ImportPath": "github.com/freeformz/go-heroku-example",
+	"GoVersion": "go1.4.2",
+  ...
+}
+```
 
 To test locally, we added a Docker deployment
-- Dockerfile: small Dockerfile to be able to build an image and run a container for our webpage
+- Dockerfile: small Dockerfile to be able to build an image and run a container for our webpage. 
+```sh
+  FROM golang:1.10-alpine3.7 as builder
+  WORKDIR /go/src/go-circleci/main
+  COPY . .
+  RUN go get -d ./... && go build -o main .
+
+  FROM alpine:3.8
+  RUN apk --no-cache add ca-certificates
+  WORKDIR /root/
+  COPY --from=builder /go/src/go-circleci/main .
+
+  EXPOSE 8080
+  ENTRYPOINT ./main
+```
 
 Finally, CircleCI config file
 - config.yml: here we setup the actual build code in Circle and the futher deployment in Heroku.
+```sh
+# Including heere the orb for Heroku
+orbs:
+  heroku: circleci/heroku@1.0.0
+  ...
+    # Calling remotly the github repo
+    working_directory: /go/src/github.com/twogg-git/go-circleci
+    steps:
+      - checkout
+      - run: go get -v -t -d ./...
+      - run: go test -v ./...
+  ...
+        # And deploying in Heroku
+        - run:
+            name: Deploy Master to Heroku
+            command: |
+              git push https://heroku:$HEROKU_KEY@git.heroku.com/go-circle.git master
+ ...
+```
 
 ## Local Docker Deployment
 
