@@ -8,14 +8,12 @@ Here is the live deployment in Heroku: **https://go-circle.herokuapp.com/**
 - Heroku Account https://www.heroku.com, to deploy the webpage in Heroku servers.
 - CircleCI connection (https://circleci.com), provide CircleCI access to your repository in GitHub.
 
-## Docker Deployment
+## Local Docker Deployment
 To run the container
 ```sh
 docker run --name go-circle -p 8181:8080 -t twogghub/go-circle:v1
-
-# Then test the webpage going in yuor browser to:
-http:localhost:8181
 ```
+Then test the webpage in your browser: http:localhost:8181
 
 ## Local building and deployment
 To build locally the image, go to the folder's project then run:
@@ -128,8 +126,7 @@ orbs:
  ...
 ```
 
-### Adding the port from the OS
-
+## Heroku's dinamic port in the code
 Heroku dynamically assigns your app a port, so you can't set the port to a fixed number. Heroku adds the port to the env, so you can pull it from there. Heroku configurations are fetched from the OS environment variables. So to fetch the webapp port, you will need to call **os.Getenv("PORT")**.
 ```sh
 func getPort() string {
@@ -143,38 +140,15 @@ func getPort() string {
 ```
 Source: https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
 
-## App deployed into Heroku
-
-https://go-circle.herokuapp.com/
-
+## Getting the HEROKU_KEY
 https://devcenter.heroku.com/articles/go-support#go-versions
 https://medium.com/forloop/continuously-deploy-your-golang-binaries-using-circleci-and-heroku-docker-eb27e06d68f2
 https://circleci.com/docs/2.0/deployment-integrations/#heroku
-
 ```sh
-version: 2
-jobs:
-  build:
-    ...
-  deploy:
-    docker:
-      - image: buildpack-deps:trusty
-    steps:
-      - checkout
-      - run:
-          name: Deploy Master to Heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
- ```
+        # And deploying in Heroku
+        - run:
+            name: Deploy Master to Heroku
+            command: |
+              git push https://heroku:$HEROKU_KEY@git.heroku.com/go-circle.git master
+ ...
+```
