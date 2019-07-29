@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const VERSION = "v1.1"
+const VERSION = "v1.2"
 const PORT = "8080"
 
 type Endpoint struct {
