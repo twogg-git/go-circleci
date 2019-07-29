@@ -5,5 +5,5 @@ func Flip(s string) string {
 	if len(s) <= 1 {
 		return s
 	}
-	return s[len(s)-4:] + Flip(s[:len(s)-1])
+	return s[len(s)-1:] + Flip(s[:len(s)-1])
 }
