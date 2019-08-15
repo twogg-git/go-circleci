@@ -131,6 +131,9 @@ Source: https://l-lin.github.io/post/2015/2015-01-31-golang-deploy_to_heroku/
 https://devcenter.heroku.com/articles/go-support#go-versions
 https://medium.com/forloop/continuously-deploy-your-golang-binaries-using-circleci-and-heroku-docker-eb27e06d68f2
 https://circleci.com/docs/2.0/deployment-integrations/#heroku
+
+To get your HEROKU_KEY go to https://dashboard.heroku.com/account then API Key. 
+
 ```sh
         # And deploying in Heroku
         - run:
